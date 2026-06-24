@@ -14,6 +14,12 @@ export default function CarStrip({ cars, recommendedCar, doorNo, evIndex, conf, 
   const arr = Array.from({ length: cars }, (_, i) => i + 1);
   return (
     <div style={{ margin: "14px 0 4px" }}>
+      <p className="sr-only">
+        進行方向{side}、{dir}。{showCar
+          ? `EVに最も近いのは${recommendedCar}号車${doorNo ? `の${doorNo}番ドア付近` : ""}です。ここに乗車してください。`
+          : "号車は確定していません。"}
+      </p>
+      <div aria-hidden="true">
       <div style={{
         display: "flex", justifyContent: "space-between",
         fontSize: 11, color: T.soft, marginBottom: 7, fontWeight: 600,
@@ -60,6 +66,7 @@ export default function CarStrip({ cars, recommendedCar, doorNo, evIndex, conf, 
             </div>
           );
         })}
+      </div>
       </div>
 
       {!showCar && (

@@ -9,7 +9,8 @@ export default function Badge({ conf }) {
       background: k.c + "14", border: `1px solid ${k.c}33`,
       borderRadius: 999, padding: "3px 9px", lineHeight: 1, whiteSpace: "nowrap",
     }}>
-      <span style={{ fontSize: 10 }}>{k.dot}</span>{k.label}
+      <span aria-hidden="true" style={{ fontSize: 10 }}>{k.dot}</span>
+      <span className="sr-only">確信度：</span>{k.label}
     </span>
   );
 }

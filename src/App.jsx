@@ -54,7 +54,8 @@ export default function App() {
           .shimmer { background-size:200% 100%; animation: sh 1.2s linear infinite; }
           @keyframes sh { 0%{ background-position:200% 0 } 100%{ background-position:-200% 0 } }
         }
-        button:focus-visible { outline: 2px solid ${T.estimated}; outline-offset: 2px; border-radius: 8px; }
+        button:focus-visible, a:focus-visible, select:focus-visible { outline: 3px solid ${T.estimated}; outline-offset: 2px; border-radius: 8px; }
+        .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
       `}</style>
 
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "20px 16px 56px" }}>
@@ -85,11 +86,11 @@ export default function App() {
               </select>
             </label>
             <button onClick={swap} aria-label="出発と到着を入れ替え" style={{
-              flexShrink: 0, width: 40, height: 40, borderRadius: 10, cursor: "pointer",
+              flexShrink: 0, width: 44, height: 44, borderRadius: 10, cursor: "pointer",
               background: "#FBFCFD", border: `1px solid ${T.line}`, color: T.soft,
               display: "flex", alignItems: "center", justifyContent: "center",
             }}>
-              <ArrowDownUp size={18} style={{ transform: "rotate(90deg)" }} />
+              <ArrowDownUp size={18} aria-hidden="true" style={{ transform: "rotate(90deg)" }} />
             </button>
             <label style={{ flex: 1 }}>
               <div style={{ fontSize: 11, color: T.soft, fontWeight: 700, marginBottom: 4 }}>到着</div>
@@ -103,23 +104,24 @@ export default function App() {
             {PROFILES.map((p) => {
               const on = profile === p.id; const Icon = PROFILE_ICONS[p.id];
               return (
-                <button key={p.id} onClick={() => setProfile(p.id)} style={{
+                <button key={p.id} onClick={() => setProfile(p.id)} aria-pressed={on}
+                  aria-label={`対象：${p.label}`} style={{
                   flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
-                  padding: "9px 4px", cursor: "pointer",
+                  padding: "9px 4px", cursor: "pointer", minHeight: 44,
                   borderRadius: 12, fontSize: 12, fontWeight: 700,
                   color: on ? T.confirmed : T.soft,
                   background: on ? T.confirmed + "10" : "#FBFCFD",
                   border: `1.5px solid ${on ? T.confirmed : T.line}`,
                 }}>
-                  <Icon size={18} /> {p.label}
+                  <Icon size={18} aria-hidden="true" /> {p.label}
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* ライブ状況バナー（層C） */}
-        <div style={{ marginBottom: 14 }}>
+        {/* ライブ状況バナー（層C）。動的更新を読み上げるライブ領域 */}
+        <div role="status" aria-live="polite" style={{ marginBottom: 14 }}>
           {!online ? (
             <div style={{
               display: "flex", alignItems: "center", gap: 8,
@@ -194,8 +196,8 @@ export default function App() {
           <div style={{
             background: T.card, border: `1px solid ${T.line}`, borderRadius: 16, padding: 18,
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.unknown, fontWeight: 800, fontSize: 14 }}>
-              <CircleHelp size={18} /> {from === to ? "同じ駅が選ばれています" : "この区間はまだ収録できていません"}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.soft, fontWeight: 800, fontSize: 14 }}>
+              <CircleHelp size={18} aria-hidden="true" /> {from === to ? "同じ駅が選ばれています" : "この区間はまだ収録できていません"}
             </div>
             <div style={{ fontSize: 13, color: T.ink, marginTop: 9, lineHeight: 1.6 }}>
               {from === to

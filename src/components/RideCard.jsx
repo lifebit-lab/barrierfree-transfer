@@ -67,12 +67,12 @@ export default function RideCard({ leg, live, profileNote }) {
 
       {/* 層C：EV運休のフォールバック */}
       {evDown && (
-        <div style={{
+        <div role="alert" style={{
           marginTop: 12, background: T.alert + "0E", border: `1px solid ${T.alert}40`,
           borderRadius: 10, padding: "10px 12px",
         }}>
           <div style={{ display: "flex", gap: 7, alignItems: "center", color: T.alert, fontWeight: 800, fontSize: 13 }}>
-            <CircleAlert size={15} />本日このEVが運休中
+            <CircleAlert size={15} aria-hidden="true" />本日このEVが運休中
           </div>
           <ol style={{ margin: "7px 0 0", paddingLeft: 18, fontSize: 12.5, color: T.ink, lineHeight: 1.65 }}>
             <li>1つ隣のEVへ迂回（+3分）</li>
@@ -93,13 +93,14 @@ export default function RideCard({ leg, live, profileNote }) {
       )}
 
       {/* 鮮度＋詳細開示 */}
-      <button onClick={() => setOpen(!open)} style={{
+      <button onClick={() => setOpen(!open)} aria-expanded={open}
+        aria-label={`出典と降車後の導線を${open ? "閉じる" : "開く"}（${leg.verifiedAt}確認・出典${leg.source.length}件）`} style={{
         marginTop: 12, display: "flex", alignItems: "center", gap: 6, width: "100%",
         background: "transparent", border: "none", cursor: "pointer",
-        fontSize: 11.5, color: T.soft, padding: 0,
+        fontSize: 11.5, color: T.soft, padding: "4px 0", minHeight: 36,
       }}>
-        <span>{leg.verifiedAt} 確認 ・ 出典 {leg.source.length}件</span>
-        <ChevronDown size={14} style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
+        <span aria-hidden="true">{leg.verifiedAt} 確認 ・ 出典 {leg.source.length}件</span>
+        <ChevronDown size={14} aria-hidden="true" style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }} />
       </button>
       {open && (
         <div style={{ marginTop: 9, paddingTop: 10, borderTop: `1px solid ${T.line}` }}>
