@@ -176,7 +176,7 @@ export default function App() {
             </div>
             {journey.legs.map((leg, i) => (
               <React.Fragment key={i}>
-                <RideCard leg={leg} live={online && live.state === "ready" ? live : null} profileNote={pNote} />
+                <RideCard leg={leg} live={online && live.state === "ready" ? live : null} profileNote={pNote} routeKey={`${from}→${to}`} />
                 {i < journey.legs.length - 1 && (
                   <div style={{ display: "flex", alignItems: "center", gap: 8, color: T.soft, fontSize: 12.5, fontWeight: 700, paddingLeft: 2 }}>
                     <MoveRight size={15} /> {leg.arriveAt}駅で乗換

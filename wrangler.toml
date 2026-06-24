@@ -1,0 +1,9 @@
+name = "barrierfree-transfer"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-06-01"
+
+# 利用者の確認報告を保存するKV（設計図§6の成長ループ）
+[[kv_namespaces]]
+binding = "REPORTS"
+id = "9fc23f1e4d30413ba5d77a78bbf9516b"
+preview_id = "dc03a39d0eef4747aedefc2ce3f6eeb6"

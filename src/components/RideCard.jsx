@@ -11,8 +11,16 @@ const rbtn = (c) => ({
 });
 
 /* 利用者の確認報告（層Aの confidence/verifiedAt を育てる入口） */
-function ReportRow() {
+function ReportRow({ target }) {
   const [v, setV] = useState(null);
+  const send = (verdict) => {
+    setV(verdict); // 楽観的に謝意表示（オフライン/失敗でも体験は止めない）
+    fetch("/api/report", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ transfer: target, verdict }),
+    }).catch(() => {});
+  };
   if (v) return (
     <div style={{ fontSize: 12, color: T.confirmed, fontWeight: 600, marginTop: 10 }}>
       ありがとうございます。確信度の更新に使われます。
@@ -21,17 +29,17 @@ function ReportRow() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10 }}>
       <span style={{ fontSize: 12, color: T.soft }}>この案内は合っていましたか？</span>
-      <button onClick={() => setV("ok")} style={rbtn(T.confirmed)}>
-        <Check size={13} strokeWidth={3} />合ってた
+      <button onClick={() => send("ok")} style={rbtn(T.confirmed)}>
+        <Check size={13} strokeWidth={3} aria-hidden="true" />合ってた
       </button>
-      <button onClick={() => setV("ng")} style={rbtn(T.soft)}>
-        <X size={13} strokeWidth={3} />違った
+      <button onClick={() => send("ng")} style={rbtn(T.soft)}>
+        <X size={13} strokeWidth={3} aria-hidden="true" />違った
       </button>
     </div>
   );
 }
 
-export default function RideCard({ leg, live, profileNote }) {
+export default function RideCard({ leg, live, profileNote, routeKey }) {
   const [open, setOpen] = useState(false);
   const k = CONF[leg.confidence];
   const evDown = live?.evDownAt === leg.arriveAt;
@@ -111,7 +119,7 @@ export default function RideCard({ leg, live, profileNote }) {
           <div style={{ fontSize: 11.5, color: T.soft, marginTop: 9 }}>
             出典：{leg.source.join(" / ")}
           </div>
-          <ReportRow />
+          <ReportRow target={`${routeKey}:${leg.line}@${leg.arriveAt}`} />
         </div>
       )}
     </div>
